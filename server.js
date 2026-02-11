@@ -39,12 +39,16 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Dossier uploads : s'assurer qu'il existe (important en production)
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+// Dossier uploads : en local on crée uploads, sur Vercel le fs est read-only → pas de crash
+const uploadsDir = process.env.VERCEL ? path.join('/tmp', 'uploads') : path.join(__dirname, 'uploads');
+try {
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  app.use('/uploads', express.static(uploadsDir));
+} catch (err) {
+  console.warn('Dossier uploads non disponible (ex: Vercel):', err.message);
 }
-app.use('/uploads', express.static(uploadsDir));
 
 // Connexion à MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/web-academy')
@@ -63,6 +67,34 @@ app.use('/api/filieres', filieresRoutes);
 app.use('/api/guides', guidesRoutes);
 app.use('/api/outils', outilsRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Page d'accueil pour vérifier que le backend répond
+app.get('/', (req, res) => {
+  res.type('html').send(`
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Academy API</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    p { color: #444; margin: 0.5rem 0; }
+    a { color: #0066cc; }
+    .badge { display: inline-block; background: #22c55e; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <span class="badge">OK</span>
+  <h1>Web Academy API</h1>
+  <p>Le backend fonctionne correctement.</p>
+  <p><a href="/api/health">Vérifier l’état de l’API (JSON)</a></p>
+</body>
+</html>
+  `);
+});
 
 // Route de test
 app.get('/api/health', (req, res) => {
