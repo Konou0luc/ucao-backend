@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import Course from '../models/Course.js';
 import InstructorAssignment from '../models/InstructorAssignment.js';
 import Settings from '../models/Settings.js';
-import { authenticate, isAdmin, isAdminOrFormateur } from '../middleware/auth.js';
+import { authenticate, optionalAuth, isAdmin, isAdminOrFormateur } from '../middleware/auth.js';
 
 /** Vérifie si l'utilisateur peut modifier le cours (créateur, formateur affecté, ou admin de l'institut). */
 async function canEditCourse(user, course) {
@@ -93,7 +93,7 @@ router.get('/mine', authenticate, async (req, res) => {
 });
 
 // Obtenir tous les cours (public avec filtres, scopé au tenant si user connecté)
-router.get('/', async (req, res) => {
+router.get('/', optionalAuth, async (req, res) => {
   try {
     const { filiere, niveau, institution, institut, status, semester, academic_year, search } = req.query;
     const query = {};
@@ -138,7 +138,7 @@ router.get('/', async (req, res) => {
 });
 
 // Obtenir un cours spécifique
-router.get('/:id', async (req, res) => {
+router.get('/:id', optionalAuth, async (req, res) => {
   try {
     const course = await Course.findById(req.params.id)
       .populate('created_by', 'name email');

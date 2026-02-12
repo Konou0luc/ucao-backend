@@ -39,16 +39,36 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Dossier uploads : en local on crée uploads, sur Vercel le fs est read-only → pas de crash
+// Dossier uploads : en local on crée uploads, sur Vercel le fs est read-only / éphémère
 const uploadsDir = process.env.VERCEL ? path.join('/tmp', 'uploads') : path.join(__dirname, 'uploads');
 try {
   if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
   }
-  app.use('/uploads', express.static(uploadsDir));
 } catch (err) {
   console.warn('Dossier uploads non disponible (ex: Vercel):', err.message);
 }
+
+// Servir les fichiers uploadés : si le fichier n'existe pas (ex. Vercel = /tmp éphémère), renvoyer 404 JSON
+app.use('/uploads', (req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+  const requestPath = path.join(uploadsDir, req.path);
+  const normalized = path.normalize(requestPath);
+  if (!normalized.startsWith(path.normalize(uploadsDir))) {
+    return res.status(400).json({ message: 'Chemin invalide' });
+  }
+  fs.stat(normalized, (err, stat) => {
+    if (err || !stat.isFile()) {
+      return res.status(404).json({
+        message: 'Fichier non disponible',
+        detail: process.env.VERCEL
+          ? 'Les fichiers uploadés ne sont pas conservés sur ce déploiement. Utilisez un stockage cloud (S3, Vercel Blob) en production.'
+          : 'Fichier introuvable.'
+      });
+    }
+    res.sendFile(normalized);
+  });
+});
 
 // Connexion à MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/web-academy')
