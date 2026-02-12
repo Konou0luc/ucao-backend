@@ -13,7 +13,7 @@ function getTransporter() {
 }
 
 function getFrom() {
-  return process.env.SMTP_FROM || process.env.SMTP_USER || 'Web Academy <noreply@web-academy.local>';
+  return process.env.SMTP_FROM || process.env.SMTP_USER || 'UCAO Academy <noreply@web-academy.local>';
 }
 
 function getAppUrl() {
@@ -39,13 +39,13 @@ async function sendMail(options) {
 export async function sendStudentAccountCreated(to, name) {
   await sendMail({
     to,
-    subject: 'Web Academy UCAO-UUT - Compte créé (en attente de vérification)',
-    text: `Bonjour ${name},\n\nVotre compte étudiant Web Academy a bien été créé.\n\nVotre identité doit être confirmée par l'administration de votre institut avant que vous puissiez accéder à la plateforme. Vous recevrez un email dès que votre compte sera validé.\n\nCordialement,\nL'équipe Web Academy UCAO-UUT`,
+    subject: 'UCAO Academy UCAO-UUT - Compte créé (en attente de vérification)',
+    text: `Bonjour ${name},\n\nVotre compte étudiant UCAO Academy a bien été créé.\n\nVotre identité doit être confirmée par l'administration de votre institut avant que vous puissiez accéder à la plateforme. Vous recevrez un email dès que votre compte sera validé.\n\nCordialement,\nL'équipe UCAO Academy UCAO-UUT`,
     html: `
       <p>Bonjour ${name},</p>
-      <p>Votre compte étudiant <strong>Web Academy</strong> a bien été créé.</p>
+      <p>Votre compte étudiant <strong>UCAO Academy</strong> a bien été créé.</p>
       <p>Votre identité doit être confirmée par l'administration de votre institut avant que vous puissiez accéder à la plateforme. Vous recevrez un email dès que votre compte sera validé.</p>
-      <p>Cordialement,<br>L'équipe Web Academy UCAO-UUT</p>
+      <p>Cordialement,<br>L'équipe UCAO Academy UCAO-UUT</p>
     `
   });
 }
@@ -54,13 +54,13 @@ export async function sendStudentIdentityConfirmed(to, name) {
   const loginUrl = `${getAppUrl()}/login`;
   await sendMail({
     to,
-    subject: 'Web Academy UCAO-UUT - Identité confirmée, connectez-vous',
-    text: `Bonjour ${name},\n\nVotre identité a été confirmée par l'administration. Vous pouvez dès à présent vous connecter à votre compte Web Academy.\n\nLien de connexion : ${loginUrl}\n\nCordialement,\nL'équipe Web Academy UCAO-UUT`,
+    subject: 'UCAO Academy UCAO-UUT - Identité confirmée, connectez-vous',
+    text: `Bonjour ${name},\n\nVotre identité a été confirmée par l'administration. Vous pouvez dès à présent vous connecter à votre compte UCAO Academy.\n\nLien de connexion : ${loginUrl}\n\nCordialement,\nL'équipe UCAO Academy UCAO-UUT`,
     html: `
       <p>Bonjour ${name},</p>
-      <p>Votre identité a été confirmée par l'administration. Vous pouvez dès à présent vous connecter à votre compte Web Academy.</p>
+      <p>Votre identité a été confirmée par l'administration. Vous pouvez dès à présent vous connecter à votre compte UCAO Academy.</p>
       <p><a href="${loginUrl}" style="display:inline-block;padding:10px 20px;background:#03045e;color:#fff;text-decoration:none;border-radius:6px;">Se connecter</a></p>
-      <p>Cordialement,<br>L'équipe Web Academy UCAO-UUT</p>
+      <p>Cordialement,<br>L'équipe UCAO Academy UCAO-UUT</p>
     `
   });
 }
@@ -68,14 +68,14 @@ export async function sendStudentIdentityConfirmed(to, name) {
 export async function sendPasswordReset(to, name, resetUrl) {
   await sendMail({
     to,
-    subject: 'Web Academy UCAO-UUT - Réinitialisation du mot de passe',
-    text: `Bonjour ${name},\n\nVous avez demandé la réinitialisation de votre mot de passe. Cliquez sur le lien ci-dessous pour en choisir un nouveau (lien valide 1 heure) :\n\n${resetUrl}\n\nSi vous n'êtes pas à l'origine de cette demande, ignorez cet email.\n\nCordialement,\nL'équipe Web Academy UCAO-UUT`,
+    subject: 'UCAO Academy UCAO-UUT - Réinitialisation du mot de passe',
+    text: `Bonjour ${name},\n\nVous avez demandé la réinitialisation de votre mot de passe. Cliquez sur le lien ci-dessous pour en choisir un nouveau (lien valide 1 heure) :\n\n${resetUrl}\n\nSi vous n'êtes pas à l'origine de cette demande, ignorez cet email.\n\nCordialement,\nL'équipe UCAO Academy UCAO-UUT`,
     html: `
       <p>Bonjour ${name},</p>
       <p>Vous avez demandé la réinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour en choisir un nouveau (lien valide 1 heure) :</p>
       <p><a href="${resetUrl}" style="display:inline-block;padding:10px 20px;background:#03045e;color:#fff;text-decoration:none;border-radius:6px;">Réinitialiser mon mot de passe</a></p>
       <p>Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
-      <p>Cordialement,<br>L'équipe Web Academy UCAO-UUT</p>
+      <p>Cordialement,<br>L'équipe UCAO Academy UCAO-UUT</p>
     `
   });
 }

@@ -100,7 +100,7 @@ app.get('/', (req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Academy API</title>
+  <title>UCAO Academy API</title>
   <style>
     * { box-sizing: border-box; }
     body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; }
@@ -112,7 +112,7 @@ app.get('/', (req, res) => {
 </head>
 <body>
   <span class="badge">OK</span>
-  <h1>Web Academy API</h1>
+  <h1>UCAO Academy API</h1>
   <p>Le backend fonctionne correctement.</p>
   <p><a href="/api/health">Vérifier l’état de l’API (JSON)</a></p>
 </body>
@@ -122,7 +122,7 @@ app.get('/', (req, res) => {
 
 // Route de test
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'API Web Academy fonctionnelle' });
+  res.json({ status: 'OK', message: 'API UCAO Academy fonctionnelle' });
 });
 
 // Gestion des erreurs

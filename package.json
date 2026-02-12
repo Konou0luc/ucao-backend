@@ -1,7 +1,7 @@
 {
   "name": "web-academy-backend",
   "version": "1.0.0",
-  "description": "Backend Node.js pour Web Academy - UCAO-UUT",
+  "description": "Backend Node.js pour UCAO Academy - UCAO-UUT",
   "main": "server.js",
   "type": "module",
   "scripts": {

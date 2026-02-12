@@ -1,4 +1,4 @@
-# Backend Web Academy - UCAO-UUT
+# Backend UCAO Academy - UCAO-UUT
 
 Backend Node.js/Express pour la plateforme de gestion de cours et de discussion de l'université UCAO-UUT.
 
