@@ -16,6 +16,12 @@ const authLimiter = rateLimit({
   max: 20, // 20 requêtes par IP / fenêtre
   standardHeaders: true,
   legacyHeaders: false,
+  // En environnement proxy (Vercel), on fait confiance à trust proxy et on désactive
+  // les validations strictes sur X-Forwarded-For / Forwarded pour éviter les erreurs.
+  validate: {
+    xForwardedForHeader: false,
+    forwardedHeader: false,
+  },
   message: { message: 'Trop de tentatives, veuillez réessayer dans quelques minutes.' }
 });
 

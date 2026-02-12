@@ -24,6 +24,10 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+// Derrière un proxy (Vercel, etc.), on doit faire confiance aux en-têtes X-Forwarded-For
+// pour que express-rate-limit et la détection d'IP fonctionnent correctement.
+app.set('trust proxy', 1);
+
 // Middleware
 // CORS : en production, on peut restreindre à un origin précis (ex. FRONTEND_URL)
 const allowedOrigin = process.env.FRONTEND_URL || process.env.APP_URL || undefined;
